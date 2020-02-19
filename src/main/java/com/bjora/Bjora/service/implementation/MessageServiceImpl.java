@@ -43,7 +43,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public GetMessageDTO deleteMessage(int messageId) {
-        Message message = (Message) messageRepository.findById(messageId).get();
+        Message message = messageRepository.findById(messageId).get();
         if(message!=null){
             User receiver = message.getReceiver();
             User sender = message.getSender();
