@@ -2,10 +2,13 @@ package com.bjora.Bjora.entities;
 
 import com.bjora.Bjora.enumerated.Gender;
 import com.bjora.Bjora.enumerated.Role;
+import com.bjora.Bjora.validator.Unique;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.List;
 
@@ -14,16 +17,25 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "users")
 public class User extends BaseEntity {
+    @NotBlank @Size(max = 100)
     private String name;
+
+    @NotBlank @Unique
     private String email;
+
+    @NotBlank @Size(min = 6)
     private String password;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) @NotNull
     private Gender gender;
+
+    @NotBlank
     private String address;
 
-    @Column(name = "profile_picture")
+    @Column(name = "profile_picture") @NotBlank
     private String profilePicture;
+
+    @NotNull
     private Date birthday;
 
     @Enumerated(EnumType.STRING)
