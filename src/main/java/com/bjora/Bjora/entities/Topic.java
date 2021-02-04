@@ -3,6 +3,7 @@ package com.bjora.Bjora.entities;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -17,6 +18,6 @@ public class Topic extends BaseEntity{
     @Column(name = "topic_name")
     String topicName;
 
-    @OneToMany(mappedBy = "topic")
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL)
     private List<Question> questions;
 }
