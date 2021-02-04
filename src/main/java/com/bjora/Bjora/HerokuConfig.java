@@ -18,6 +18,8 @@ public class HerokuConfig {
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(dbUrl);
+        config.setPassword("yoseftanaka");
+        config.setUsername("postgres");
         return new HikariDataSource(config);
     }
 }
