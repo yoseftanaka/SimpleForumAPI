@@ -11,4 +11,5 @@ public interface UserService {
     public GetUserDTO createUser(PostUserDTO postUserDTO);
     public GetUserDTO updateUser(int userId, PostUserDTO postUserDTO);
     public GetUserDTO deleteUser(int userId);
+
 }
