@@ -6,16 +6,23 @@ import com.bjora.Bjora.entities.User;
 import com.bjora.Bjora.repositories.UserRepository;
 import com.bjora.Bjora.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public GetUserDTO getSingleUser(int id) {
@@ -41,7 +48,11 @@ public class UserServiceImpl implements UserService {
         user.setEmail(postUserDTO.getEmail());
         user.setGender(postUserDTO.getGender());
         user.setName(postUserDTO.getName());
-        user.setPassword(postUserDTO.getPassword());
+        user.setPassword(
+                bCryptPasswordEncoder.encode(
+                        postUserDTO.getPassword()
+                )
+        );
         user.setProfilePicture(postUserDTO.getProfilePicture());
         user.setRole(postUserDTO.getRole());
         userRepository.save(user);
@@ -86,5 +97,10 @@ public class UserServiceImpl implements UserService {
             return user;
         }
         else return null;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return null;
     }
 }
