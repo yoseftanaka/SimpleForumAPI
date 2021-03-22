@@ -1,8 +1,7 @@
 package com.bjora.Bjora.security;
 
-import com.bjora.Bjora.service.implementation.UserDetailServiceImpl;
+import com.bjora.Bjora.constant.WhitelistConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,12 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableWebSecurity
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class WebSecurityAdapter extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -25,15 +21,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     private static final String[] AUTH_WHITELIST = {
-            "/api/users",
-            "/api/users/byName/**",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/webjars/**",
-            "auth/login"
+            WhitelistConstants.CONFIGURATION_UI,
+            WhitelistConstants.CONFIGURATION_SECURITY,
+            WhitelistConstants.SWAGGER_RESOURCE_ALL,
+            WhitelistConstants.SWAGGER_RESOURCE,
+            WhitelistConstants.SWAGGER_UI,
+            WhitelistConstants.WEBJARS_ALL,
+            WhitelistConstants.LOGIN,
+            WhitelistConstants.SIGN_UP,
     };
 
     protected void configure(HttpSecurity httpSecurity) throws Exception
@@ -51,18 +46,5 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception
     {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
-    }
-
-    @Bean
-    CorsConfigurationSource corsConfigurationSource()
-    {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",new CorsConfiguration().applyPermitDefaultValues());
-        return source;
-    }
-
-    @Bean
-    UserDetailsService userDetailService() {
-        return new UserDetailServiceImpl();
     }
 }
